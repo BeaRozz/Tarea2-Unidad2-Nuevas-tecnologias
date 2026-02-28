@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Parcial 1 Nuevas tecnologías 🐮</h1>
+    <h1>Parcial 1 Nuevas tecnologías 🐮 Muu</h1>
     <p>Desplegado con GitHub Actions en AWS ECS Fargate</p>
     <div class="vaca">
       <pre>
