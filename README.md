@@ -1,58 +1,40 @@
-# Arquitectura AWS: ECS Fargate + ALB (Proyecto bearozz)
+# Parcial 1: Arquitectura AWS con ECS Fargate, ALB y CI/CD 🐮
 
-Esta arquitectura implementa un entorno de contenedores escalable y de alta disponibilidad en AWS utilizando **Terraform**.
+Este proyecto implementa una arquitectura completa en AWS utilizando **Terraform** para la infraestructura y **GitHub Actions** para el despliegue automatizado de una aplicación en **Vue.js**.
 
-## Descripción de la Arquitectura
+## Estructura del Proyecto
 
-La solución implementa los siguientes componentes:
-
-- **VPC DMZ (vpc.tf)**: Una red virtual dividida en 2 subredes públicas (para el ALB) y 2 privadas (para los contenedores). Incluye Internet Gateway y NAT Gateway para permitir que las tareas en subredes privadas descarguen imágenes de ECR.
-- **ECS Fargate (ecs.tf)**: Un clúster de ECS configurado para ejecutar tareas de tipo Fargate, garantizando una infraestructura sin servidor (Serverless).
-- **Application Load Balancer (alb.tf)**: Un balanceador de carga público que distribuye el tráfico hacia los contenedores.
-- **IAM (iam.tf)**: Roles con los permisos mínimos necesarios para que ECS pueda ejecutar tareas y enviar logs a CloudWatch.
-- **ECR (ecr.tf)**: Un registro de contenedores privado para almacenar las imágenes de la aplicación.
-- **Naming**: Todos los recursos siguen el convenio de nombres con el prefijo/sufijo `bearozz`.
+- **`.github/workflows/`**: Pipeline de CI/CD que automatiza el build de Docker y el despliegue en ECS.
+- **`app/`**: Aplicación frontend en Vue 3 con temática de vacas 🐮, configurada para correr en el puerto **8000**.
+- **`iac/`**: Código de Terraform modular para la infraestructura (VPC, ALB, ECS, ECR, IAM).
+- **`ESTUDIO_INFRAESTRUCTURA.md`**: Guía detallada sobre los componentes de red y seguridad.
+- **`ESTUDIO_DEVOPS_CICD.md`**: Guía detallada sobre el flujo de automatización y Docker.
 
 ## Requisitos Previos
 
-1. [Instalar Terraform](https://developer.hashicorp.com/terraform/downloads) (v1.0+ recomendado).
-2. [Instalar AWS CLI](https://aws.amazon.com/cli/) y configurar tus credenciales (`aws configure`).
-3. [Instalar Docker](https://www.docker.com/products/docker-desktop/) si planeas subir tu propia imagen.
+1. AWS CLI configurado con credenciales.
+2. Terraform instalado.
+3. GitHub Secrets configurados (`AWS_ACCESS_KEY_ID` y `AWS_SECRET_ACCESS_KEY`).
 
-## Pasos de Uso
+## Pasos para el Despliegue
 
-1. **Inicializar Terraform**:
+1. **Infraestructura**:
    ```bash
+   cd iac
    terraform init
-   ```
-
-2. **Revisar el plan de ejecución**:
-   ```bash
-   terraform plan
-   ```
-
-3. **Desplegar la infraestructura**:
-   ```bash
    terraform apply
    ```
+2. **Aplicación**:
+   Realiza un `git push` a la rama `main` para disparar el flujo de GitHub Actions. El pipeline construirá la imagen, la subirá al ECR `repo-bearozz` y actualizará el servicio ECS.
 
-4. **Subir imagen a ECR** (opcional):
-   Sigue las instrucciones en el archivo `ecr_commands.txt` para autenticarte y subir tu imagen.
+3. **Acceso**:
+   Usa la URL del Load Balancer proporcionada por los `outputs` de Terraform para ver la aplicación en el puerto 80.
 
-5. **Prueba de acceso**:
-   Una vez desplegado, copia el valor de `alb_dns_name` mostrado en los `outputs` y pégalo en tu navegador. Por defecto verás la página de bienvenida de **Nginx**.
+## Notas Técnicas
 
-## Resultados Esperados
-
-- Una URL pública (`alb-bearozz-...`) que responda con la aplicación desplegada.
-- Logs de ejecución disponibles en **Amazon CloudWatch** bajo el grupo `/ecs/bearozz`.
-- Repositorio ECR listo para recibir imágenes.
-
-## Enlaces de Ayuda
-
-- [Documentación ECS Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html)
-- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-- [Best Practices for AWS VPC](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-networking-concepts.html)
+- **Puerto del Contenedor**: 8000 (mapeado desde el puerto 80 del ALB).
+- **Seguridad**: Los contenedores corren en subredes privadas sin IP pública.
+- **Actualización**: El despliegue usa `force-new-deployment` para garantizar que siempre se tome la imagen más reciente de ECR.
 
 ---
-**Desarrollado por bearozz (Beatriz Rosado)**
+**Proyecto Bearozz - bearozz (Beatriz Rosado)**
