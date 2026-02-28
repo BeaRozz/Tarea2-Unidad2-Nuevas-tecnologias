@@ -19,6 +19,6 @@ variable "container_port" {
 }
 
 variable "container_image" {
-  description = "Imagen de Docker para ECS (default: nginx)"
-  default     = "nginx:latest"
+  description = "URL de la imagen en ECR"
+  default     = "235494782320.dkr.ecr.us-east-1.amazonaws.com/repo-bearozz:latest"
 }
