@@ -38,8 +38,8 @@ resource "aws_lb" "alb_bearozz" {
 
 # Target Group para ECS Fargate
 resource "aws_lb_target_group" "tg_bearozz" {
-  name        = "tg-${var.project_name}"
-  port        = 80
+  name_prefix = "tg-bea" # Prefijo de máximo 6 caracteres
+  port        = var.container_port
   protocol    = "HTTP"
   vpc_id      = aws_vpc.vpc_bearozz.id
   target_type = "ip"
@@ -50,6 +50,10 @@ resource "aws_lb_target_group" "tg_bearozz" {
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 2
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   tags = {

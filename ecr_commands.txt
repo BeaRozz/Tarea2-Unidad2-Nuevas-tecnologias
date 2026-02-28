@@ -1,0 +1,16 @@
+# Comandos para subir la imagen a ECR (Proyecto bearozz)
+
+# 1. Autenticar Docker con el registro de ECR
+# Reemplaza <REGION> con la región configurada (ej: us-east-1)
+# Reemplaza <ACCOUNT_ID> con tu ID de cuenta de AWS
+aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com
+
+# 2. Construir la imagen de Docker
+# Asegúrate de estar en el directorio que contiene el Dockerfile
+docker build -t repo-bearozz .
+
+# 3. Etiquetar la imagen para el repositorio ECR
+docker tag repo-bearozz:latest <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/repo-bearozz:latest
+
+# 4. Subir la imagen al repositorio
+docker push <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/repo-bearozz:latest

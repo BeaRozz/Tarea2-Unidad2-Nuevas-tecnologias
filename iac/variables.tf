@@ -15,7 +15,7 @@ variable "vpc_cidr" {
 
 variable "container_port" {
   description = "Puerto en el que escucha el contenedor"
-  default     = 80
+  default     = 8000
 }
 
 variable "container_image" {

@@ -10,8 +10,27 @@ override.tf.json
 *_override.tf.json
 .terraform.lock.hcl
 
-# Archivos Sensibles / Comandos
-ecr_commands.txt
+# Node.js y Vue (App)
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# Logs
+# Archivos Sensibles / Comandos
+infra/ecr_commands.txt
+.env
+.env.*
+
+# Logs y VS Code
 *.log
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
