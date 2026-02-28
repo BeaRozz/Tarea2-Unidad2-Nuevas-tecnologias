@@ -37,4 +37,4 @@ Este proyecto implementa una arquitectura completa en AWS utilizando **Terraform
 - **Actualización**: El despliegue usa `force-new-deployment` para garantizar que siempre se tome la imagen más reciente de ECR.
 
 ---
-**Proyecto Bearozz - Nuevas Tecnologías 2026**
+**Proyecto Bearozz - bearozz (Beatriz Rosado)**
